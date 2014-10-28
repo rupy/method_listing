@@ -1,6 +1,5 @@
 classes = ObjectSpace.each_object(Class).reject { |k| "#{k}".match /Gem|Thor|Gviz/ }
 
-
 h = {}
 classes.each do |klass|
  tree = klass.ancestors.select { |anc| anc.is_a? Class }.reverse
@@ -8,28 +7,33 @@ classes.each do |klass|
  puts "====="
  tree.each_cons(2) do |a, b|
    a_id, b_id = [a, b].map(&:object_id)
-   # puts "#{a_id} => #{b_id} / #{a} => #{b}"
    h[b] = a
 
-   puts "#{a_id} => #{b_id} / #{a} => #{b}"
+   # puts "#{a_id} => #{b_id} / #{a} => #{b}"
  end
 end
 
 # 親子関係
-h.each_pair do |child,parent|
-  puts "#{child} <= #{parent}"
-end
+# h.each_pair do |child,parent|
+#   puts "#{child} <= #{parent}"
+# end
 
+# sum = 0
 h.each_pair do |child,parent|
-  puts child
+  puts "@#{child}"
 
   # クラスメソッド
   # print child.methods
 
   # インスタンスメソッド
-  print child.instance_methods
+  child.instance_methods(false).each do |m|
+    puts m
+  end
+  # print child.instance_methods.size
+  # sum += child.instance_methods.size
   puts
 end
 
-
+# puts h.length
+# puts sum
 
